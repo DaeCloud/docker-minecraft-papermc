@@ -40,7 +40,7 @@ RUN cd /var/www/html && \
     wget https://github.com/mesacarlos/WebConsole/releases/download/v2.5/client-v2.5.zip && \
     unzip client-v2.5.zip && \
     rm client-v2.5.zip && \
-    cp -r ./client-v2.5/ ./ && \
+    cp -r ./client-v2.5/. .. && \
     rm -R client-v2.5
 
 # Expose necessary ports
