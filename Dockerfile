@@ -5,8 +5,12 @@ WORKDIR /minecraft
 
 # Install necessary packages
 RUN apt-get update && \
-    apt-get install -y wget && \
+    apt-get install -y wget curl gnupg && \
     rm -rf /var/lib/apt/lists/*
+
+# Install Node.js and npm
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+    apt-get install -y nodejs
 
 # Set environment variables
 ENV PAPER_VERSION=1.20.6 \
@@ -14,7 +18,7 @@ ENV PAPER_VERSION=1.20.6 \
     MEMORY_SIZE=4G \
     EULA=false
 
-# Create the start script in the /minecraft directory
+# Create the start script in the root directory
 RUN echo '#!/bin/bash\n\
     # Check if eula.txt exists\n\
     if [ ! -f /minecraft/eula.txt ]; then\n\
@@ -35,11 +39,19 @@ RUN echo '#!/bin/bash\n\
     java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
     chmod +x /start.sh
 
-# Expose Minecraft server port
-EXPOSE 25565
+# Install the Minecraft Server Web Wrapper
+RUN npm install -g mc-web
 
-# Ensure script has executable permissions at runtime
-CMD ["chmod", "+x", "/start.sh"]
+# Expose Minecraft server port and web interface port
+EXPOSE 25565 8080
 
-# Set the entrypoint to the start script
-ENTRYPOINT ["sh", "/start.sh"]
+# Create an entrypoint script to start both the web interface and Minecraft server
+RUN echo '#!/bin/bash\n\
+    # Start the Web Wrapper\n\
+    mc-web --dir /minecraft &\n\
+    # Start the Minecraft server\n\
+    /bin/sh /start.sh' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Set the entrypoint to the entrypoint script
+ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
