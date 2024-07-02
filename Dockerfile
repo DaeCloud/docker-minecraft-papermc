@@ -39,13 +39,23 @@ RUN echo '#!/bin/bash\n\
     java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
     chmod +x /start.sh
 
-# Download and install McMyAdmin
-RUN wget -O McMyAdmin.zip https://mcmyadmin.com/Downloads/MCMA2_glibc25_2.zip && \
-    unzip McMyAdmin.zip -d /minecraft && \
-    rm McMyAdmin.zip
+# Install McMyAdmin
+WORKDIR /usr/local
+RUN wget https://mcmyadmin.com/Downloads/etc.zip && \
+    unzip etc.zip && \
+    rm etc.zip
+
+# Switch to non-root user for McMyAdmin setup
+USER nobody
+RUN mkdir -p ~/McMyAdmin && \
+    cd ~/McMyAdmin && \
+    wget https://mcmyadmin.com/Downloads/MCMA2_glibc26_2.zip && \
+    unzip MCMA2_glibc26_2.zip && \
+    rm MCMA2_glibc26_2.zip && \
+    ./MCMA2_Linux_x86_64 -setpass [YOURPASSWORD] -configonly
 
 # Expose McMyAdmin port
 EXPOSE 8080
 
 # Start McMyAdmin
-CMD ["/minecraft/MCMA2_Linux_x86_64", "-nonotice"]
+CMD ["sh", "-c", "cd ~/McMyAdmin; ./MCMA2_Linux_x86_64"]
