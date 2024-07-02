@@ -43,9 +43,13 @@ RUN echo '#!/bin/bash\n\
     chmod +x /start.sh
 
 # Install MineOS
-RUN git clone https://github.com/hexparrot/mineos-node.git /usr/games/minecraft && \
+RUN git clone https://github.com/hexparrot/mineos-node /usr/games/minecraft && \
     cd /usr/games/minecraft && \
-    npm install --unsafe-perm
+    git config core.filemode false && \
+    chmod +x generate-sslcert.sh mineos_console.js webui.js && \
+    cp mineos.conf /etc/mineos.conf && \
+    npm install --unsafe-perm && \
+    ./generate-sslcert.sh
 
 # Configure supervisor
 RUN echo '[supervisord]\n\
