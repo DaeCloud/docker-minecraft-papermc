@@ -36,7 +36,7 @@ RUN echo '#!/bin/bash\n\
     chmod +x /start.sh
 
 # Expose necessary ports
-EXPOSE 25565 8080
+EXPOSE 25565 80
 
 # Start supervisor to manage MineOS and Minecraft server
 CMD ["sh", "/start.sh"]
