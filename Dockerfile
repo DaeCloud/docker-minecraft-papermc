@@ -5,7 +5,7 @@ WORKDIR /minecraft
 
 # Install necessary packages
 RUN apt-get update && \
-    apt-get install -y wget curl gnupg build-essential && \
+    apt-get install -y wget unzip curl gnupg build-essential rdiff-backup screen && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Node.js and npm
