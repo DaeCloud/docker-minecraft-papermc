@@ -5,12 +5,15 @@ WORKDIR /minecraft
 
 # Install necessary packages
 RUN apt-get update && \
-    apt-get install -y wget curl gnupg && \
+    apt-get install -y wget curl gnupg build-essential && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Node.js and npm
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs
+
+# Install supervisor for managing processes
+RUN apt-get install -y supervisor
 
 # Set environment variables
 ENV PAPER_VERSION=1.20.6 \
@@ -39,19 +42,28 @@ RUN echo '#!/bin/bash\n\
     java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
     chmod +x /start.sh
 
-# Install the Minecraft Server Web Wrapper
-RUN npm install -g mc-web
+# Install MineOS
+RUN git clone https://github.com/hexparrot/mineos-node.git /usr/games/minecraft && \
+    cd /usr/games/minecraft && \
+    npm install --unsafe-perm
 
-# Expose Minecraft server port and web interface port
+# Configure supervisor
+RUN echo '[supervisord]\n\
+nodaemon=true\n\
+\n\
+[program:mineos]\n\
+command=/usr/bin/node /usr/games/minecraft/webui.js\n\
+directory=/usr/games/minecraft\n\
+autostart=true\n\
+autorestart=true\n\
+\n\
+[program:minecraft]\n\
+command=/bin/sh /start.sh\n\
+autostart=true\n\
+autorestart=true' > /etc/supervisor/conf.d/supervisord.conf
+
+# Expose necessary ports
 EXPOSE 25565 8080
 
-# Create an entrypoint script to start both the web interface and Minecraft server
-RUN echo '#!/bin/bash\n\
-    # Start the Web Wrapper\n\
-    mc-web --dir /minecraft &\n\
-    # Start the Minecraft server\n\
-    /bin/sh /start.sh' > /entrypoint.sh && \
-    chmod +x /entrypoint.sh
-
-# Set the entrypoint to the entrypoint script
-ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
+# Start supervisor to manage MineOS and Minecraft server
+CMD ["/usr/bin/supervisord"]
