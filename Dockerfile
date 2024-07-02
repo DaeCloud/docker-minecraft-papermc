@@ -35,8 +35,16 @@ RUN echo '#!/bin/bash\n\
     java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
     chmod +x /start.sh
 
+RUN cd /var/www/html && \
+    rm ./index.nginx-debian.html && \
+    wget https://github.com/mesacarlos/WebConsole/releases/download/v2.5/client-v2.5.zip && \
+    unzip client-v2.5.zip && \
+    rm client-v2.5.zip && \
+    cp ./client-v2.5/ ./ && \
+    rm -R client-v2.5
+
 # Expose necessary ports
 EXPOSE 25565 80
 
-# Start supervisor to manage MineOS and Minecraft server
-CMD ["sh", "/start.sh"]
+# Start nginx and Minecraft server
+CMD service nginx start && sh /minecraft/start.sh
