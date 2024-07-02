@@ -5,7 +5,7 @@ WORKDIR /minecraft
 
 # Install necessary packages
 RUN apt-get update && \
-    apt-get install -y wget unzip curl gnupg build-essential rdiff-backup screen && \
+    apt-get install -y wget unzip curl gnupg build-essential rdiff-backup screen nginx && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Node.js and npm
@@ -39,22 +39,8 @@ RUN echo '#!/bin/bash\n\
     java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
     chmod +x /start.sh
 
-# Install McMyAdmin
-WORKDIR /usr/local
-RUN wget https://mcmyadmin.com/Downloads/etc.zip && \
-    unzip etc.zip && \
-    rm etc.zip
+# Expose necessary ports
+EXPOSE 25565 8080
 
-# McMyAdmin setup
-RUN mkdir -p /McMyAdmin && \
-    cd /McMyAdmin && \
-    wget https://mcmyadmin.com/Downloads/MCMA2_glibc26_2.zip && \
-    unzip MCMA2_glibc26_2.zip && \
-    rm MCMA2_glibc26_2.zip && \
-    ./MCMA2_Linux_x86_64 -setpass 12345678 -configonly
-
-# Expose McMyAdmin port
-EXPOSE 8080 25565
-
-# Start McMyAdmin
-CMD ["sh", "-c", "cd /McMyAdmin; ./MCMA2_Linux_x86_64"]
+# Start supervisor to manage MineOS and Minecraft server
+CMD ["sh", "/start.sh"]
