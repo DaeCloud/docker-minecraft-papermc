@@ -5,12 +5,8 @@ WORKDIR /minecraft
 
 # Install necessary packages
 RUN apt-get update && \
-    apt-get install -y wget unzip curl gnupg build-essential rdiff-backup screen nginx && \
+    apt-get install -y wget unzip curl gnupg build-essential nginx && \
     rm -rf /var/lib/apt/lists/*
-
-# Install Node.js and npm
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs
 
 # Set environment variables
 ENV PAPER_VERSION=1.20.6 \
