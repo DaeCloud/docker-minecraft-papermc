@@ -12,9 +12,6 @@ RUN apt-get update && \
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs
 
-# Install supervisor for managing processes
-RUN apt-get install -y supervisor
-
 # Set environment variables
 ENV PAPER_VERSION=1.20.6 \
     PAPER_BUILD=147 \
@@ -42,34 +39,8 @@ RUN echo '#!/bin/bash\n\
     java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
     chmod +x /start.sh
 
-# Install MineOS
-RUN wget -qO mineos-node-master.zip https://github.com/hexparrot/mineos-node/archive/master.zip && \
-    unzip -q mineos-node-master.zip -d /usr/games/minecraft && \
-    rm mineos-node-master.zip
-
-RUN cd /usr/games/minecraft/mineos-node-master && \
-    chmod +x generate-sslcert.sh mineos_console.js webui.js && \
-    cp mineos.conf /etc/mineos.conf && \
-    npm install --unsafe-perm && \
-    ./generate-sslcert.sh
-
-# Configure supervisor
-RUN echo '[supervisord]\n\
-nodaemon=true\n\
-\n\
-[program:mineos]\n\
-command=/usr/bin/node /usr/games/minecraft/webui.js\n\
-directory=/usr/games/minecraft\n\
-autostart=true\n\
-autorestart=true\n\
-\n\
-[program:minecraft]\n\
-command=/bin/sh /start.sh\n\
-autostart=true\n\
-autorestart=true' > /etc/supervisor/conf.d/supervisord.conf
-
 # Expose necessary ports
-EXPOSE 25565 8080
+EXPOSE 25565
 
 # Start supervisor to manage MineOS and Minecraft server
-CMD ["/usr/bin/supervisord"]
+CMD ["sh", "/start.sh"]
