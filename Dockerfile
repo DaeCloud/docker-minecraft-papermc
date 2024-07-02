@@ -1,17 +1,20 @@
 FROM openjdk:21-jdk-slim
 
+# Set working directory
 WORKDIR /minecraft
 
+# Install necessary packages
 RUN apt-get update && \
     apt-get install -y wget && \
     rm -rf /var/lib/apt/lists/*
 
+# Set environment variables
 ENV PAPER_VERSION=1.20.6 \
     PAPER_BUILD=147 \
     MEMORY_SIZE=4G \
     EULA=false
 
-# Create the start script
+# Create the start script in the /minecraft directory
 RUN echo '#!/bin/bash\n\
     # Check if eula.txt exists\n\
     if [ ! -f /minecraft/eula.txt ]; then\n\
@@ -29,9 +32,11 @@ RUN echo '#!/bin/bash\n\
     fi\n\
     \n\
     # Start the Minecraft server\n\
-    java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > start.sh && \
-    chmod +x start.sh
+    java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /minecraft/start.sh && \
+    chmod +x /minecraft/start.sh
 
+# Expose Minecraft server port
 EXPOSE 25565
 
+# Set the entrypoint to the start script
 ENTRYPOINT ["/minecraft/start.sh"]
