@@ -47,15 +47,15 @@ RUN wget https://mcmyadmin.com/Downloads/etc.zip && \
 
 # Switch to non-root user for McMyAdmin setup
 USER nobody
-RUN mkdir -p ~/McMyAdmin && \
-    cd ~/McMyAdmin && \
+RUN mkdir -p /minecraft/McMyAdmin && \
+    cd /minecraft/McMyAdmin && \
     wget https://mcmyadmin.com/Downloads/MCMA2_glibc26_2.zip && \
     unzip MCMA2_glibc26_2.zip && \
     rm MCMA2_glibc26_2.zip && \
-    ./MCMA2_Linux_x86_64 -setpass [YOURPASSWORD] -configonly
+    ./MCMA2_Linux_x86_64 -setpass ${ADMIN_PASS} -configonly
 
 # Expose McMyAdmin port
-EXPOSE 8080
+EXPOSE 8080 25565
 
 # Start McMyAdmin
-CMD ["sh", "-c", "cd ~/McMyAdmin; ./MCMA2_Linux_x86_64"]
+CMD ["sh", "-c", "cd /minecraft/McMyAdmin; ./MCMA2_Linux_x86_64"]
