@@ -45,14 +45,13 @@ RUN wget https://mcmyadmin.com/Downloads/etc.zip && \
     unzip etc.zip && \
     rm etc.zip
 
-# Switch to non-root user for McMyAdmin setup
-USER nobody
+# McMyAdmin setup
 RUN mkdir -p /McMyAdmin && \
     cd /McMyAdmin && \
     wget https://mcmyadmin.com/Downloads/MCMA2_glibc26_2.zip && \
     unzip MCMA2_glibc26_2.zip && \
     rm MCMA2_glibc26_2.zip && \
-    ./MCMA2_Linux_x86_64 -setpass ${ADMIN_PASS} -configonly
+    ./MCMA2_Linux_x86_64 -setpass 12345678 -configonly
 
 # Expose McMyAdmin port
 EXPOSE 8080 25565
