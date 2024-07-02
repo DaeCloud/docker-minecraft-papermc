@@ -11,9 +11,7 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
 
@@ -27,7 +25,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build and tag the Docker image
-      run: docker build . --file Dockerfile --tag minecraft-papermc:latest --tag minecraft-papermc:${{ inputs.tag }}
+      run: docker build . --file Dockerfile --tag daelinc/minecraft-papermc:latest --tag daelinc/minecraft-papermc:${{ inputs.tag }}
 
     - name: Push the Docker image to Docker Hub
       run: |
