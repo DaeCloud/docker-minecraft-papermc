@@ -39,4 +39,4 @@ RUN echo '#!/bin/bash\n\
 EXPOSE 25565
 
 # Set the entrypoint to the start script
-ENTRYPOINT ["/minecraft/start.sh"]
+ENTRYPOINT ["sh", "/minecraft/start.sh"]
