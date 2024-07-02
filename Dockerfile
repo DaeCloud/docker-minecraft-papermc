@@ -38,5 +38,8 @@ RUN echo '#!/bin/bash\n\
 # Expose Minecraft server port
 EXPOSE 25565
 
+# Ensure script has executable permissions at runtime
+CMD ["chmod", "+x", "/minecraft/start.sh"]
+
 # Set the entrypoint to the start script
 ENTRYPOINT ["sh", "/minecraft/start.sh"]
