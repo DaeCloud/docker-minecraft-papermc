@@ -34,4 +34,4 @@ RUN echo '#!/bin/bash\n\
 
 EXPOSE 25565
 
-ENTRYPOINT ["./start.sh"]
+ENTRYPOINT ["/minecraft/start.sh"]
