@@ -47,7 +47,7 @@ RUN wget -qO mineos-node-master.zip https://github.com/hexparrot/mineos-node/arc
     unzip -q mineos-node-master.zip -d /usr/games/minecraft && \
     rm mineos-node-master.zip
 
-RUN cd /usr/games/minecraft && \
+RUN cd /usr/games/minecraft/mineos-node-master && \
     chmod +x generate-sslcert.sh mineos_console.js webui.js && \
     cp mineos.conf /etc/mineos.conf && \
     npm install --unsafe-perm && \
