@@ -9,7 +9,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Node.js and npm
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash - \
     apt-get install -y nodejs
 
 # Set environment variables
