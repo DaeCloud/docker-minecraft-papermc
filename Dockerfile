@@ -32,14 +32,14 @@ RUN echo '#!/bin/bash\n\
     fi\n\
     \n\
     # Start the Minecraft server\n\
-    java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /minecraft/start.sh && \
-    chmod +x /minecraft/start.sh
+    java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
+    chmod +x /start.sh
 
 # Expose Minecraft server port
 EXPOSE 25565
 
 # Ensure script has executable permissions at runtime
-CMD ["chmod", "+x", "/minecraft/start.sh"]
+CMD ["chmod", "+x", "/start.sh"]
 
 # Set the entrypoint to the start script
-ENTRYPOINT ["sh", "/minecraft/start.sh"]
+ENTRYPOINT ["sh", "/start.sh"]
