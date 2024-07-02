@@ -16,6 +16,14 @@ ENV PAPER_VERSION=1.20.6 \
 
 # Create the start script in the root directory
 RUN echo '#!/bin/bash\n\
+    # Create plugins folder if it does not exist\n\
+    mkdir -p /minecraft/plugins\n\
+    \n\
+    # Download WebConsole-2.5.jar if it does not exist in plugins folder\n\
+    if [ ! -f /minecraft/plugins/WebConsole-2.5.jar ]; then\n\
+    wget -O /minecraft/plugins/WebConsole-2.5.jar "https://github.com/mesacarlos/WebConsole/releases/download/v2.5/WebConsole-2.5.jar";\n\
+    fi\n\
+    \n\
     # Check if eula.txt exists\n\
     if [ ! -f /minecraft/eula.txt ]; then\n\
     # Check EULA environment variable and create eula.txt accordingly\n\
@@ -35,16 +43,18 @@ RUN echo '#!/bin/bash\n\
     java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
     chmod +x /start.sh
 
+
+
 RUN cd /var/www/html && \
     rm ./index.nginx-debian.html && \
     wget https://github.com/mesacarlos/WebConsole/releases/download/v2.5/client-v2.5.zip && \
     unzip client-v2.5.zip && \
     rm client-v2.5.zip && \
-    cp -r ./client-v2.5/. .. && \
+    cp -r ./client-v2.5/. . && \
     rm -R client-v2.5
 
 # Expose necessary ports
 EXPOSE 25565 80
 
 # Start nginx and Minecraft server
-CMD service nginx start && sh /minecraft/start.sh
+CMD service nginx start && sh /start.sh
