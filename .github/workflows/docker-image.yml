@@ -25,9 +25,9 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build and tag the Docker image
-      run: docker build . --file Dockerfile --tag daelinc/minecraft-papermc:latest --tag daelinc/minecraft-papermc:${{ inputs.tag }}
+      run: docker build . --file Dockerfile --tag daelinc/minecraft-papermc:${{ inputs.tag }} --tag daelinc/minecraft-papermc:latest
 
     - name: Push the Docker image to Docker Hub
       run: |
-        docker push daelinc/minecraft-papermc:latest
         docker push daelinc/minecraft-papermc:${{ inputs.tag }}
+        docker push daelinc/minecraft-papermc:latest
