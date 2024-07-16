@@ -17,6 +17,10 @@ ENV PAPER_VERSION=1.20.6 \
 
 # Create the start script in the root directory
 RUN echo '#!/bin/bash\n\
+    # Log environment variable values for debugging\n\
+    echo "MEMORY_SIZE: $MEMORY_SIZE"\n\
+    echo "THREAD_STACK_SIZE: $THREAD_STACK_SIZE"\n\
+    \n\
     # Create plugins folder if it does not exist\n\
     mkdir -p /minecraft/plugins\n\
     \n\
@@ -43,6 +47,7 @@ RUN echo '#!/bin/bash\n\
     # Start the Minecraft server\n\
     java -Xms"${MEMORY_SIZE}" -Xmx"${MEMORY_SIZE}" -XX:ThreadStackSize="${THREAD_STACK_SIZE}" -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
     chmod +x /start.sh
+
 
 # Set up WebConsole for nginx
 RUN cd /var/www/html && \
