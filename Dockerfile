@@ -45,7 +45,7 @@ RUN echo '#!/bin/bash\n\
     fi\n\
     \n\
     # Start the Minecraft server\n\
-    java -Xms"${MEMORY_SIZE}" -Xmx"${MEMORY_SIZE}" -XX:ThreadStackSize="${THREAD_STACK_SIZE}" -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
+    java -Xms"${MEMORY_SIZE}" -Xmx"${MEMORY_SIZE}" -XX:ThreadStackSize=256k -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
     chmod +x /start.sh
 
 
