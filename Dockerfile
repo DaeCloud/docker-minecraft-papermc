@@ -12,7 +12,8 @@ RUN apt-get update && \
 ENV PAPER_VERSION=1.20.6 \
     PAPER_BUILD=147 \
     MEMORY_SIZE=4G \
-    EULA=false
+    EULA=false \
+    THREAD_STACK_SIZE=256k
 
 # Create the start script in the root directory
 RUN echo '#!/bin/bash\n\
@@ -40,7 +41,7 @@ RUN echo '#!/bin/bash\n\
     fi\n\
     \n\
     # Start the Minecraft server\n\
-    java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
+    java -Xms${MEMORY_SIZE} -Xmx${MEMORY_SIZE} -XX:ThreadStackSize={THREAD_STACK_SIZE} -jar /minecraft/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar nogui' > /start.sh && \
     chmod +x /start.sh
 
 
