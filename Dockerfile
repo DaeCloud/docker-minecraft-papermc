@@ -57,4 +57,4 @@ RUN cd /var/www/html && \
 EXPOSE 25565 80 8080
 
 # Start nginx and Minecraft server
-CMD sudo service nginx start && sh /start.sh
+CMD nginx && sh /start.sh
