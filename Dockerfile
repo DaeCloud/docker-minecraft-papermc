@@ -26,7 +26,7 @@ RUN echo '#!/bin/bash\n\
     \n\
     # Download WebConsole-2.5.jar if it does not exist in plugins folder\n\
     if [ ! -f /minecraft/plugins/WebConsole-2.5.jar ]; then\n\
-    wget -O /minecraft/plugins/WebConsole-2.5.jar "https://github.com/mesacarlos/WebConsole/releases/download/v2.5/WebConsole-2.5.jar";\n\
+    wget -O /minecraft/plugins/WebConsole-2.5.jar "https://github.com/mesacarlos/WebConsole/releases/download/v2.6/WebConsole-2.6.jar";\n\
     fi\n\
     \n\
     # Check if eula.txt exists\n\
