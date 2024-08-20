@@ -14,7 +14,7 @@ ENV PAPER_VERSION=1.20.6 \
     MEMORY_SIZE=4G \
     EULA=false \
     THREAD_STACK_SIZE=256k \
-    SERVER_TYPE=paper # Optional environment variable
+    SERVER_TYPE=paper
 
 # Create the start script in the root directory
 RUN echo '#!/bin/bash\n\
