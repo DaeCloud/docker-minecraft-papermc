@@ -67,7 +67,7 @@ RUN cd /var/www/html && \
     rm -R client-v2.5
 
 # Expose necessary ports
-EXPOSE 25565 80 8080 19132 443
+EXPOSE 25565 80 8080 19132 443 25577
 
 # Start nginx and Minecraft server
 CMD nginx && sh /start.sh
